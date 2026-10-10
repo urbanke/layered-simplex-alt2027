@@ -2,7 +2,8 @@
 
 Probabilities are per labelled symbol. Evidence is for an ordered sequence,
 not a multinomial count event, and is returned in natural logarithms.
-Undefined absolute-discounting cases are explicit, not replaced by another rule.
+Absolute discounting uses the versioned robust experimental discount and
+explicit empty-sample and fully-observed-alphabet conventions.
 """
 
 from __future__ import annotations
@@ -16,6 +17,8 @@ import numpy as np
 from scipy.special import gammaln, logsumexp
 
 DIRICHLET_EXPONENTS = tuple(range(-24, 5))
+ABSOLUTE_DISCOUNTING_RULE = "falahatgar2017_experimental"
+ABSOLUTE_DISCOUNTING_VERSION = "robust-ad-v1"
 BASELINE_METHODS = (
     "add_one", "kt", "ristad", "good_turing_hybrid",
     "dirichlet_concentration_mixture", "absolute_discounting", "oracle",
@@ -91,24 +94,34 @@ def ristad(counts: Sequence[int]) -> np.ndarray:
 
 
 def absolute_discounting(counts: Sequence[int]) -> BaselinePrediction:
+    """Robust experimental AD with explicit finite-alphabet extensions.
+
+    For 0 < s < d use delta = min(max(c1, 1) / s, 0.9), retaining
+    (m_i - delta) / n on observed labels and distributing delta * s / n
+    uniformly over unseen labels. At n=0 return the uniform distribution;
+    at s=d return the empirical distribution, with no mass reserved.
+    The historical method name is retained; diagnostics identify this rule.
+    """
     m = validate_counts(counts)
     n, d, s = int(m.sum()), m.size, int(np.count_nonzero(m))
     c1, c2 = int(np.count_nonzero(m == 1)), int(np.count_nonzero(m == 2))
-    diagnostics = {"n": n, "distinct": s, "c1": c1, "c2": c2}
-    if c1 + 2 * c2 == 0:
-        return BaselinePrediction(None, "undefined", "c1_and_c2_are_zero", diagnostics)
-    delta = c1 / (c1 + 2 * c2)
+    diagnostics = {
+        "n": n, "distinct": s, "c1": c1, "c2": c2,
+        "estimator_rule": ABSOLUTE_DISCOUNTING_RULE,
+        "estimator_version": ABSOLUTE_DISCOUNTING_VERSION,
+        "boundary_case": None,
+    }
+    if n == 0:
+        diagnostics.update(discount=0.0, boundary_case="empty_sample_uniform")
+        return BaselinePrediction(np.full(d, 1.0 / d), diagnostics=diagnostics)
+    if s == d:
+        diagnostics.update(discount=0.0, boundary_case="full_alphabet_empirical")
+        return BaselinePrediction(m / n, diagnostics=diagnostics)
+    delta = min(max(c1, 1) / s, 0.9)
     diagnostics["discount"] = delta
-    if s == d and delta > 0:
-        # The manuscript defines allocation to unseen labels only. Do not
-        # invent a fallback when this class is empty (outside d > n tests).
-        return BaselinePrediction(
-            None, "undefined", "no_unseen_symbol_for_reserved_mass", diagnostics,
-        )
     q = np.zeros(d, dtype=float)
     q[m > 0] = (m[m > 0] - delta) / n
-    if s < d:
-        q[m == 0] = delta * s / (n * (d - s))
+    q[m == 0] = delta * s / (n * (d - s))
     return BaselinePrediction(q, diagnostics=diagnostics)
 
 

@@ -1,13 +1,14 @@
 {
   "schema_version": 1,
-  "protocol_id": "alt2027-smoke-v1",
+  "protocol_id": "alt2027-smoke-v2-robust-ad",
   "status": "smoke",
   "units": {
     "log_evidence": "nats",
     "loss": "bits"
   },
   "decisions": {
-    "purpose": "Small domains for end-to-end validation. No paper estimates."
+    "purpose": "Small domains for end-to-end validation. No paper estimates.",
+    "absolute_discounting": "Use robust-ad-v1: delta=min(max(c1,1)/s,0.9), uniform at n=0, empirical at s=d. All sampling grids and seeds are unchanged."
   },
   "experiments": {
     "architecture": {
@@ -85,7 +86,14 @@
         2
       ],
       "dirichlet_target_policy": "redraw_per_trial_shared_across_n",
-      "sample_size_policy": "independent_multinomial_per_n"
+      "sample_size_policy": "independent_multinomial_per_n",
+      "absolute_discounting": {
+        "rule": "falahatgar2017_experimental",
+        "version": "robust-ad-v1",
+        "discount": "min(max(c1,1)/s,0.9)",
+        "empty_sample": "uniform",
+        "full_alphabet": "empirical"
+      }
     },
     "benchmark_powers": {
       "d": 8,
@@ -139,7 +147,14 @@
         2
       ],
       "dirichlet_target_policy": "redraw_per_trial_shared_across_n",
-      "sample_size_policy": "independent_multinomial_per_n"
+      "sample_size_policy": "independent_multinomial_per_n",
+      "absolute_discounting": {
+        "rule": "falahatgar2017_experimental",
+        "version": "robust-ad-v1",
+        "discount": "min(max(c1,1)/s,0.9)",
+        "empty_sample": "uniform",
+        "full_alphabet": "empirical"
+      }
     },
     "bible": {
       "corpus": "data/kjv.txt",
@@ -339,5 +354,12 @@
     "posterior_broad_min_depths": 5,
     "posterior_individual_min_weight": 0.05,
     "uniform_floor": 1e-14
+  },
+  "revision": {
+    "supersedes": "alt2027-smoke-v1",
+    "changed_method": "absolute_discounting",
+    "rule": "falahatgar2017_experimental",
+    "version": "robust-ad-v1",
+    "sampling_changed": false
   }
 }

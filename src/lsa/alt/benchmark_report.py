@@ -244,7 +244,7 @@ def plot_learning_curves(summary: Mapping[str, Any], output_path: str | Path, *,
                 if cell["status"] != "finite":
                     details["nonfinite_points"].append({"target": target, "n": n, "method": method,
                                                        "status": cell["status"], "counts": cell["counts"]})
-                    # NaN breaks a line; do not bridge omitted AD points.
+                    # NaN breaks a line; do not bridge nonfinite points.
                     x.append(n); means.append(np.nan); ses.append(np.nan)
                     continue
                 mean, se = cell["mean_bits"], cell["se_bits"]
@@ -283,9 +283,10 @@ def plot_learning_curves(summary: Mapping[str, Any], output_path: str | Path, *,
         axes.flat[-1].legend(handles=handles, loc="center", fontsize=8, frameon=False)
     else:
         fig.legend(handles=handles, loc="lower center", ncol=3, fontsize=8)
-    fig.text(.5, .006,
-             f"Bars: one standard error; triangles: uniform loss ≤ {uniform_floor:g} bits; "
-             "nonfinite AD cases marked in panels.",
+    footer = f"Bars: one standard error; triangles: uniform loss ≤ {uniform_floor:g} bits."
+    if details["nonfinite_points"]:
+        footer += " Nonfinite cases marked in panels."
+    fig.text(.5, .006, footer,
              ha="center", fontsize=7)
     fig.tight_layout(rect=(0, .035, 1, 1))
     fig.savefig(output_path, bbox_inches="tight")

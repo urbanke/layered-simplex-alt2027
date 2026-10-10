@@ -9,6 +9,14 @@ studies how depth changes that prior and its predictive behavior. It includes
 the LSA predictors, the comparison methods, numerical validation and the programs
 for the paper's figures and tables.
 
+Version 1.1.0 corrects the absolute-discounting (AD) comparison to use the
+robust experimental rule described in the [protocol](docs/protocol.md).
+The correction reuses the original samples and saved results for every other
+method. See the [change log](CHANGELOG.md) for its scope and the distinction
+from the original v1.0.0 results.
+The [saved-sample correction guide](docs/ad-correction.md) describes how to
+verify the original inputs and reproduce this correction separately.
+
 ## Install
 
 Use Python 3.13 or 3.14 on Linux or macOS. Native numerical acceleration requires

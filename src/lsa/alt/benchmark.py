@@ -21,6 +21,8 @@ import numpy as np
 from scipy.special import logsumexp
 
 from .baselines import (
+    ABSOLUTE_DISCOUNTING_RULE,
+    ABSOLUTE_DISCOUNTING_VERSION,
     BASELINE_METHODS,
     evaluate_baseline,
     kl_bits,
@@ -94,6 +96,18 @@ def validate_config(config: Mapping[str, Any]) -> dict[str, Any]:
     if missing:
         raise ValueError(f"missing explicit benchmark settings: {sorted(missing)}")
     out = dict(config)
+    # Historical saved records omit this declaration. New executions always use
+    # the current baseline; any explicit declaration must agree with that rule.
+    if "absolute_discounting" in out:
+        expected_ad = {
+            "rule": ABSOLUTE_DISCOUNTING_RULE,
+            "version": ABSOLUTE_DISCOUNTING_VERSION,
+            "discount": "min(max(c1,1)/s,0.9)",
+            "empty_sample": "uniform",
+            "full_alphabet": "empirical",
+        }
+        if out["absolute_discounting"] != expected_ad:
+            raise ValueError("absolute_discounting declaration does not match robust-ad-v1")
     for key in ("d", "trials"):
         out[key] = _positive_int(out[key], key)
     out["seed"] = _positive_int(out["seed"], "seed", zero=True)

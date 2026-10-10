@@ -1,21 +1,26 @@
 {
-  "description": "Compact scientific summaries for current-paper reporting. Full trials can be recomputed with the supplied protocol. Operational execution records are outside this bundle.",
+  "ad_correction": "data/ad-correction.json",
+  "description": "Compact scientific summaries for current-paper reporting, with robust AD corrected on the exact original saved samples. Full experiments can be recreated with the supplied protocol.",
   "files": {
+    "data/ad-correction.json": {
+      "bytes": 4742,
+      "sha256": "dbbae1c5e260aa97339970f56f9fd8f334ab576c32766eb789c5bc19405cc465"
+    },
     "data/benchmark_powers-blocks.json.gz": {
-      "bytes": 157308,
-      "sha256": "b0f3315ce2ce80fecc7885c51e2ae5639c3c8fd065bc7038aebc77f2b1fc6e7d"
+      "bytes": 174547,
+      "sha256": "0ab0ac82f655ed50e84d1c24c88ce6df3c313e3c7225833030a419f16ffad5d7"
     },
     "data/benchmark_powers.json.gz": {
-      "bytes": 30472,
-      "sha256": "190480faf4fa9fae4475675125bfe940277e18dbaf1d06e69e544ab77fa34abc"
+      "bytes": 34168,
+      "sha256": "876370422556da43976cbc193ae3efeab20a4290b7919252a39d0bc707bfe31b"
     },
     "data/benchmark_primary-blocks.json.gz": {
-      "bytes": 975698,
-      "sha256": "5f85dc087d84024202b753b50c86bc46819a93c836492fb4f354c87963b76295"
+      "bytes": 1101800,
+      "sha256": "7255e32deb7fca624955d5b16b84dcd99a751675a8784bdbca11cf2c4ec7c54b"
     },
     "data/benchmark_primary.json.gz": {
-      "bytes": 148401,
-      "sha256": "aaf79b54150e12e29ca3069eac1c58eb3f04c5d4a4097ecc8afd47425932c4ed"
+      "bytes": 168079,
+      "sha256": "cc06c1f806a81dbcf20732061d11547b9980cfb56a431dfb6898c33e749f32bf"
     },
     "data/bible-secondary.json": {
       "bytes": 2783,
@@ -42,8 +47,8 @@
       "sha256": "61f9103f8d0230a28213422d6b0c1c3d43b4ac3b5920431f1ac1455fb2c2bdca"
     },
     "data/paired-reasons.json.gz": {
-      "bytes": 2724,
-      "sha256": "8694afdc2ab7f8370c0de01bbc5e6f20695ed5f452a07623407f6f0a551e77ea"
+      "bytes": 1674,
+      "sha256": "a3536fb8631dca5b997c8fccbfb3331d679a0ce302347cbcfa33bd2c79cb822c"
     },
     "data/report-settings.json": {
       "bytes": 288,
@@ -98,7 +103,7 @@
           "data/benchmark_primary.json.gz"
         ],
         "label": "fig:orlitsky",
-        "meaning": "Eight sample sizes; one marginal SE; uniform floor triangles and nonfinite line breaks.",
+        "meaning": "Eight sample sizes; one marginal SE; uniform floor triangles. Robust AD uses the Falahatgar et al. experimental discount rule.",
         "output": "figures/regret_vs_n_figures.pdf"
       },
       {
@@ -116,7 +121,7 @@
       "data/validation.json",
       "data/runtime.json"
     ],
-    "scope": "99 benchmark cells, 902 method summaries, 3773 paired summaries; all 1000 trials per cell retained, including infinite/undefined outcomes.",
+    "scope": "99 benchmark cells, 902 method summaries, 3773 paired summaries; all 1000 trials per cell retained. Robust AD is finite in all 99,000 observed evaluations; generic nonfinite reporting remains supported.",
     "tables": [
       {
         "data": [

@@ -22,7 +22,7 @@ def families():
     return data.load_benchmarks(ROOT / "results")
 
 
-def test_release_coverage_and_nonfinite_accounting(families):
+def test_release_coverage_and_finite_robust_ad_accounting(families):
     counts = []
     for summary, blocks, reasons in families.values():
         cells = [cell for ns in summary["targets"].values() for cell in ns.values()]
@@ -35,16 +35,40 @@ def test_release_coverage_and_nonfinite_accounting(families):
         )
         assert len(blocks["blocks"]) == 10
         assert all(b["trials"] == 100 for b in blocks["blocks"])
+        for cell in cells:
+            ad = cell["methods"]["absolute_discounting"]
+            assert ad["status"] == "finite" and ad["counts"] == {
+                "finite": 1000, "infinite": 0, "undefined": 0,
+            }
+            assert math.isfinite(ad["mean_bits"]) and ad["mean_bits"] >= 0
+            assert math.isfinite(ad["se_bits"]) and ad["se_bits"] >= 0
+            for name, pair in cell["paired_differences"].items():
+                if "absolute_discounting" in name:
+                    assert pair["status"] == "finite" and pair["counts"] == {
+                        "finite": 1000, "infinite": 0, "undefined": 0,
+                    }
+        for block in blocks["blocks"]:
+            for ns in block["targets"].values():
+                for cell in ns.values():
+                    ad = cell["methods"]["absolute_discounting"]
+                    assert ad["status"] == "finite" and ad["counts"] == {
+                        "finite": 100, "infinite": 0, "undefined": 0,
+                    }
     assert counts == [(88, 792, 3256), (11, 110, 517)]
-    cell = families["benchmark_primary"][0]["targets"]["zipf_2"]["1000"]["methods"][
-        "absolute_discounting"
-    ]
-    assert cell["status"] == "infinite" and cell["counts"] == {
-        "finite": 998,
-        "infinite": 2,
-        "undefined": 0,
-    }
-    assert cell["mean_bits"] is cell["se_bits"] is None
+
+
+def test_reference_correction_records_rule_and_reuse_provenance(families):
+    for summary, blocks, _ in families.values():
+        correction = summary["correction"]
+        assert blocks["correction"] == correction
+        assert correction["method"] == "absolute_discounting"
+        assert correction["rule"] == "falahatgar2017_experimental"
+        assert correction["version"] == "robust-ad-v1"
+        assert correction["lsa_reevaluated"] is False
+        assert correction["samples_regenerated"] is False
+        source_hash = correction["baseline_module_sha256"]
+        assert len(source_hash) == 64
+        assert all(c in "0123456789abcdef" for c in source_hash)
 
 
 def test_precise_large_n_paired_and_block_evidence(families):
@@ -105,7 +129,8 @@ def test_table_is_generated_from_data_and_preserves_printed_ties(tmp_path, famil
         label="tab:bench",
     )
     original = (tmp_path / "original.tex").read_text()
-    assert "0.0139" in original and r"$\infty^{*}$" in original
+    assert "0.0139" in original  # Unchanged LSA entry.
+    assert r"$\infty^{*}$" not in original and r"n.a.$^{*}$" not in original
     summary["targets"]["zipf_5"]["1000"]["methods"]["lsa_depth_mixture"][
         "mean_bits"
     ] = 0.123456
@@ -208,11 +233,13 @@ def test_checksum_and_missing_cell_fail_closed(tmp_path, families):
         data.check_targets(summary["targets"], summary["config"], 1000)
 
 
-def test_nonfinite_cannot_acquire_finite_mean(families):
+@pytest.mark.parametrize("status", ["infinite", "undefined"])
+def test_nonfinite_cannot_acquire_finite_mean(families, status):
     summary = deepcopy(families["benchmark_primary"][0])
-    summary["targets"]["zipf_2"]["1000"]["methods"]["absolute_discounting"][
-        "mean_bits"
-    ] = 0.1
+    cell = summary["targets"]["zipf_2"]["1000"]["methods"]["absolute_discounting"]
+    counts = {"finite": 999, "infinite": 0, "undefined": 0}
+    counts[status] = 1
+    cell.update(status=status, counts=counts, mean_bits=0.1, se_bits=None)
     with pytest.raises(ValueError, match="nonfinite"):
         data.check_targets(summary["targets"], summary["config"], 1000)
 
@@ -376,13 +403,82 @@ def test_figures_preserve_zero_nonfinite_and_uncertainty_conventions(
         methods=primary["config"]["methods"],
         uniform_floor=1e-14,
     )
-    assert len(details["nonfinite_points"]) == 26
+    assert details["nonfinite_points"] == []
     assert len(details["uniform_floor_points"]) == 15
     assert details["zero_points_outside_uniform"] == []
-    assert all(
-        p["method"] == "absolute_discounting" for p in details["nonfinite_points"]
-    )
     assert "not confidence intervals" in details["standard_errors"]
+
+
+def synthetic_cell(status="finite", mean=0.2):
+    counts = {"finite": 1000, "infinite": 0, "undefined": 0}
+    if status != "finite":
+        counts["finite"], counts[status] = 999, 1
+    return {
+        "status": status, "trials": 1000, "counts": counts,
+        "mean_bits": mean if status == "finite" else None,
+        "se_bits": 0.01 if status == "finite" else None,
+    }
+
+
+def test_tables_preserve_synthetic_infinite_and_undefined_results(tmp_path):
+    summary = {"config": {"sample_set_id": "synthetic"}, "targets": {
+        "uniform": {"1000": {"methods": {
+            "absolute_discounting": synthetic_cell("infinite"),
+            "kt": synthetic_cell(),
+        }}},
+        "step": {"1000": {"methods": {
+            "absolute_discounting": synthetic_cell(),
+            "kt": synthetic_cell("undefined"),
+        }}},
+    }}
+    render.write_loss_table(summary, tmp_path / "nonfinite", n=1000,
+                            targets=["uniform", "step"],
+                            methods=["absolute_discounting", "kt"], label="synthetic")
+    text = (tmp_path / "nonfinite.tex").read_text()
+    assert r"$\infty^{*}$" in text and r"n.a.$^{*}$" in text
+    with (tmp_path / "nonfinite.tsv").open() as stream:
+        rows = list(csv.DictReader(stream, delimiter="\t"))
+    nonfinite = [row for row in rows if row["status"] != "finite"]
+    assert {row["status"] for row in nonfinite} == {"infinite", "undefined"}
+    assert all(row["mean_bits"] == row["se_bits"] == "" for row in nonfinite)
+
+
+@pytest.mark.parametrize("nonfinite", [False, True])
+def test_synthetic_curves_break_nonfinite_lines_and_condition_the_note(
+    tmp_path, monkeypatch, nonfinite,
+):
+    import matplotlib
+    matplotlib.use("Agg")
+    from matplotlib.figure import Figure
+
+    summary = {"config": {"n_values": [1000, 2000, 3000]}, "targets": {"step": {}}}
+    for i, n in enumerate(summary["config"]["n_values"]):
+        summary["targets"]["step"][str(n)] = {"methods": {
+            "absolute_discounting": synthetic_cell(mean=0.2 + i / 10),
+            "kt": synthetic_cell(mean=0.3 + i / 10),
+        }}
+    if nonfinite:
+        summary["targets"]["step"]["2000"]["methods"]["absolute_discounting"] = synthetic_cell("infinite")
+        summary["targets"]["step"]["3000"]["methods"]["kt"] = synthetic_cell("undefined")
+    captured = {}
+
+    def capture(figure, *args, **kwargs):
+        captured["footer"] = " ".join(text.get_text() for text in figure.texts)
+        captured["lines"] = [line.get_ydata() for line in figure.axes[0].lines]
+
+    monkeypatch.setattr(Figure, "savefig", capture)
+    details = render.plot_learning_curves(summary, tmp_path / "synthetic.pdf",
+                                         targets=["step"],
+                                         methods=["absolute_discounting", "kt"],
+                                         uniform_floor=1e-14)
+    assert ("Nonfinite cases marked" in captured["footer"]) is nonfinite
+    if nonfinite:
+        assert {(p["method"], p["n"], p["status"]) for p in details["nonfinite_points"]} == {
+            ("absolute_discounting", 2000, "infinite"), ("kt", 3000, "undefined"),
+        }
+        assert any(len(y) == 3 and math.isnan(y[1]) for y in captured["lines"])
+    else:
+        assert details["nonfinite_points"] == []
 
 
 def test_posterior_intervals_describe_mass_not_sampling_confidence(families):

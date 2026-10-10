@@ -10,7 +10,7 @@ authors:
     given-names: Ruediger
 license: MIT
 repository-code: "https://github.com/urbanke/layered-simplex-alt2027"
-version: 1.0.0
+version: 1.1.0
 preferred-citation:
   type: article
   title: "A Layered Simplex Architecture for Large Alphabets"

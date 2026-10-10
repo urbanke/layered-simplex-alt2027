@@ -1,0 +1,118 @@
+{
+  "ad_overlay_pins": {
+    "benchmark_powers": {
+      "bytes": 24039404,
+      "sha256": "da2395c9d0be43f755c85dd65e8008c6201fe291307263de61990cfc1380c290"
+    },
+    "benchmark_primary": {
+      "bytes": 177301495,
+      "sha256": "9fec2827af86f865e97c9c968222a8c6a6865b8c2e484fc2d6c78b82d9eee74e"
+    }
+  },
+  "correction": {
+    "baseline_module_sha256": "a5d2b6cf7dd26ec81405a14af5b169b45ca0b42bca5ffa40db3a41efe2fe4324",
+    "lsa_reevaluated": false,
+    "method": "absolute_discounting",
+    "original_artifacts_modified": false,
+    "provenance_file": "data/ad-correction.json",
+    "rule": "falahatgar2017_experimental",
+    "samples_regenerated": false,
+    "version": "robust-ad-v1"
+  },
+  "correction_completion_sha256": "4bc569bfeb9a56434d292a69fcba2a95b0af01c28ea059a91742a0bdd9265ca0",
+  "correction_inventory_sha256": "9d70d9c3800dfba54026cbbc878c619035844948552bd6d3bbb4f9f0ef2c5629",
+  "correction_spec_sha256": "c680ffe23dd4080572ea5884b02a45e1adcd0d90ea57eff63538658b0f12e7ed",
+  "data_scope": "Compact reference summaries only. Original trial/sample records and correction overlays are excluded; supplied programs recreate the experiment outputs.",
+  "preservation": "Only AD and pairs containing AD changed. LSA, other comparators, samples, uncertainty definitions and all other experiments are unchanged.",
+  "release": "v1.1.0",
+  "required_runtime": {
+    "numpy": "2.5.1",
+    "python": "3.13.15",
+    "scipy": "1.18.0"
+  },
+  "rule": {
+    "delta": "min(max(c1,1)/s,0.9)",
+    "empty_sample": "uniform",
+    "full_alphabet_observed": "empirical"
+  },
+  "saved_data_pipeline_sha256": "38ad73c476bf1ebe105c4b30ebfeedce3e1270462887aaf88b7e9458af157aaf",
+  "schema_version": 1,
+  "scope": {
+    "blocks_per_cell": 10,
+    "full_trial_rows": 99000,
+    "method_rows": 902,
+    "paired_rows": 3773,
+    "power_cells": 11,
+    "primary_cells": 88,
+    "recomputed_ad_paired_rows": 803,
+    "trials_per_cell": 1000
+  },
+  "source_metadata_pins": {
+    "acceptance/manifest.json": {
+      "bytes": 1751361,
+      "sha256": "7d8898fb96ab94a57238726cc5133f0339920e1184347d83e05b82c7787fe7df"
+    },
+    "acceptance/result.json": {
+      "bytes": 4528,
+      "sha256": "2cf0110cea853b45ec86e307493c9f59e10660870246e2399c653e871a2bad54"
+    },
+    "merged/benchmark_powers/data/benchmark-config.json": {
+      "bytes": 2339,
+      "sha256": "35087b8b29edd0519254650d5a91e1c7afa1561d595a79c7b23ee05479577430"
+    },
+    "merged/benchmark_powers/data/block-diagnostics.json": {
+      "bytes": 2599639,
+      "sha256": "1b5aa0a1dae396cd765a37e78d9acbdbe665592f6d5e46b0f9e3d5dc0db62fc1"
+    },
+    "merged/benchmark_powers/data/samples/manifest.json": {
+      "bytes": 7178294,
+      "sha256": "05dd7cf99c6bd5868dc40af639291584c3e48afd07c0dd40489d22e39f31cbdc"
+    },
+    "merged/benchmark_powers/data/summary.json": {
+      "bytes": 324304,
+      "sha256": "043c6f3655ef7a18edcdc71d2a3b24c771a5246988809750234eb9a0cb1e68ce"
+    },
+    "merged/benchmark_powers/manifest.json": {
+      "bytes": 1925811,
+      "sha256": "547c341b686811ea0349c6c01a10b8dfef667d26eb4a45f8ce14aa2ed0be08ba"
+    },
+    "merged/benchmark_primary/data/benchmark-config.json": {
+      "bytes": 1752,
+      "sha256": "f45ca4b51880a657a6b20d2e263b752b463761c3d7f106d988968d81aa69b6f3"
+    },
+    "merged/benchmark_primary/data/block-diagnostics.json": {
+      "bytes": 16736702,
+      "sha256": "5dc1ad560e881080f1727b49e3d8e5be6017ed21236045eb80e41d565db30cd4"
+    },
+    "merged/benchmark_primary/data/samples/manifest.json": {
+      "bytes": 34445382,
+      "sha256": "16d26e720bb65e3eaa4a4b0d96edc1423d1fe8e07e9b32c932f9014f74b78b7a"
+    },
+    "merged/benchmark_primary/data/summary.json": {
+      "bytes": 1870653,
+      "sha256": "dad1eaa4b29232e46196e34a280fa29bb441f14d9a4ec8473533d42d27d29b0b"
+    },
+    "merged/benchmark_primary/manifest.json": {
+      "bytes": 2796184,
+      "sha256": "37ad93d4f54e3d840c7cdf1dde6051402f446cba25cddd91a08dd569b8ea18e1"
+    },
+    "merged/merge.json": {
+      "bytes": 2638,
+      "sha256": "3c50de0376fc65317c6e3884461dba646a5bf616a1f2ab8abd8f75608f050bc8"
+    }
+  },
+  "source_public_manifest_sha256": "bf5f5e17278af34571a23cbe84e45cc8b41f58d15e308a3c1858d5d6c2ba1bae",
+  "source_scientific_commit": "1c67b7af1928f0fdec7e2a9cb5abae631a9e00cb",
+  "source_scientific_tree_sha256": "a27bfdcbcc29b5326c2ea088188097d85061d39ddac761c5f40cde956ccf23fc",
+  "source_trial_pins": {
+    "benchmark_powers": {
+      "bytes": 5055065844,
+      "sha256": "5c73341f00f6212ec70806430b2d2c9de12fd855afa47007170cfd652855a342"
+    },
+    "benchmark_primary": {
+      "bytes": 68729147611,
+      "sha256": "4a5bc256dfe17dd9f1faf583bf53b4c7152084a0c4d78adfe2e2b6177c3a9844"
+    }
+  },
+  "supersedes_reference_release": "v1.0.0"
+}

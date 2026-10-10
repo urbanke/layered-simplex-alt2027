@@ -4,6 +4,12 @@ The executable settings are in `experiments/alt2027/protocol.json`. Its seeds,
 grids, trial counts and numerical settings are fixed before sampling. The
 following is a reading guide to that file; the JSON is the exact configuration.
 
+Protocol `alt2027-retained-v3-robust-ad` preserves the sampling grids and seeds
+of `alt2027-retained-v2` and changes the AD estimator definition below. Fresh
+runs save its versioned method declaration with each benchmark configuration;
+the reference correction retains the historical sampling configurations and
+records the changed rule in separate correction provenance.
+
 | Experiment | Fixed workload |
 |---|---|
 | Architecture illustration | Alphabet 24, four layers, seed 7 |
@@ -36,6 +42,29 @@ averaging only its finite trials. Reporting distinguishes these cases from
 numerical evaluation errors.
 
 ## Model and plotting conventions
+
+### Absolute discounting
+
+The `absolute_discounting` method uses rule `falahatgar2017_experimental`,
+version `robust-ad-v1`. Let `n` be the sample size, `d` the alphabet size,
+`s` the number of observed symbols and `c1` the number observed exactly once.
+For `0 < s < d`, set `delta = min(max(c1, 1) / s, 0.9)`. An observed symbol
+with count `m_i` receives `(m_i - delta) / n`; each unseen symbol receives
+`delta * s / (n * (d - s))`. This is the experimental discount in Section 8 of
+[Falahatgar, Ohannessian, Orlitsky and Pichapati (2017), *The power of absolute
+discounting: all-dimensional distribution estimation*](https://proceedings.neurips.cc/paper/2017/file/331316d4efb44682092a006307b9ae3a-Paper.pdf).
+The finite-alphabet boundary conventions used here are explicit: the empty
+sample (`n = 0`) gives the uniform distribution, and a fully observed alphabet
+(`s = d`) gives the empirical distribution `m_i / n` with no reserved mass.
+
+The v1.0.0 comparison instead used `c1 / (c1 + 2*c2)`, where `c2` counts
+doubletons. That rule can produce zero or undefined discounts. Its saved
+outcomes belong to that historical release. The v1.1.0 correction recomputes
+AD and its paired comparisons on the same 99,000 trials across 99 primary and
+powered benchmark cells; it reuses all saved non-AD losses and posteriors.
+This correction does not constitute a fresh full numerical campaign.
+
+### LSA and displays
 
 Depth zero is the uniform point-mass prior; it is included in the depth average.
 The average is a Bayesian mixture of marginal likelihoods, so its predictive

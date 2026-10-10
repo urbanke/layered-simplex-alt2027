@@ -343,7 +343,7 @@ def plot_learning_curves(
                             "counts": cell["counts"],
                         }
                     )
-                    # NaN breaks a line; do not bridge omitted AD points.
+                    # NaN breaks a line; do not bridge nonfinite points.
                     x.append(n)
                     means.append(np.nan)
                     ses.append(np.nan)
@@ -418,11 +418,16 @@ def plot_learning_curves(
         axes.flat[-1].legend(handles=handles, loc="center", fontsize=9.5, frameon=False)
     else:
         fig.legend(handles=handles, loc="lower center", ncol=3, fontsize=8)
+    footer = (
+        f"Bars: one standard error; triangles: uniform loss ≤ {uniform_floor:g} bits.\n"
+        "Sample-size ticks: k = 1,000."
+    )
+    if details["nonfinite_points"]:
+        footer += " Nonfinite cases marked in panels."
     fig.text(
         0.5,
         0.006,
-        f"Bars: one standard error; triangles: uniform loss ≤ {uniform_floor:g} bits.\n"
-        "Sample-size ticks: k = 1,000. Nonfinite AD cases marked in panels.",
+        footer,
         ha="center",
         fontsize=8.5,
     )

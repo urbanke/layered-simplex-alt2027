@@ -5,6 +5,14 @@ from the paper's fixed settings and seeds. It does not require the authors' save
 large outputs or a private cluster account. It requires substantial computing
 time and disk space; use the [small example](quick-start.md) first.
 
+Version 1.1.0 uses the robust AD rule and explicit boundary conventions in the
+[protocol](protocol.md#absolute-discounting). A fresh run evaluates that rule
+alongside the other methods. The included reference correction separately
+reuses the original non-AD trial results; it is not evidence that this full
+campaign has been rerun.
+To reproduce only that correction from the original saved samples and losses,
+follow the [saved-sample correction guide](ad-correction.md).
+
 Run from the repository root after [installation](installation.md). Keep the
 source unchanged throughout a run and cap numerical library threads at one per
 worker as described there. Choose new output paths for a new execution. The

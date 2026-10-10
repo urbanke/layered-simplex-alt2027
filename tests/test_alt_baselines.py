@@ -7,11 +7,14 @@ import numpy as np
 import pytest
 
 from lsa.alt.baselines import (
+    ABSOLUTE_DISCOUNTING_RULE,
+    ABSOLUTE_DISCOUNTING_VERSION,
     DIRICHLET_EXPONENTS,
     absolute_discounting,
     add_constant,
     dirichlet_concentration_mixture,
     dirichlet_log_evidence,
+    evaluate_baseline,
     good_turing_hybrid,
     kl_bits,
     natural_oracle,
@@ -70,19 +73,78 @@ def test_ristad_boundaries_and_normalization():
         assert q.sum() == pytest.approx(1, abs=2e-15)
 
 
-def test_ad_preserves_distinct_undefined_and_infinite_cases():
-    undefined = absolute_discounting([0, 3, 4])
-    assert undefined.status == "undefined" and undefined.probabilities is None
-    assert undefined.reason == "c1_and_c2_are_zero"
-    zero_discount = absolute_discounting([0, 2, 4])
-    np.testing.assert_allclose(zero_discount.probabilities, [0, 1 / 3, 2 / 3])
-    assert math.isinf(kl_bits([0.2, 0.3, 0.5], zero_discount.probabilities))
-    # Zero target mass at an unseen symbol does not itself cause infinite KL.
-    assert math.isfinite(kl_bits([0, 0.3, 0.7], zero_discount.probabilities))
-    assert absolute_discounting([1, 2]).reason == "no_unseen_symbol_for_reserved_mass"
-    all_singletons = absolute_discounting([0, 1, 1])
-    np.testing.assert_allclose(all_singletons.probabilities, [1, 0, 0])
-    assert math.isinf(kl_bits([0.2, 0.3, 0.5], all_singletons.probabilities))
+@pytest.mark.parametrize("counts, discount, expected", [
+    ([0, 3, 4], 1 / 2, [1 / 7, 5 / 14, 1 / 2]),  # No singletons or doubletons.
+    ([0, 2, 4], 1 / 2, [1 / 6, 1 / 4, 7 / 12]),  # No singletons.
+    ([0, 1, 4], 1 / 2, [1 / 5, 1 / 10, 7 / 10]),  # No doubletons.
+    ([0, 1, 1], 0.9, [9 / 10, 1 / 20, 1 / 20]),  # All observations singleton.
+    ([1, 0, 0], 0.9, [1 / 10, 9 / 20, 9 / 20]),  # One observation.
+    ([3, 0, 0], 0.9, [7 / 10, 3 / 20, 3 / 20]),  # One observed type.
+    ([1, 1, 2, 0, 0], 2 / 3, [1 / 12, 1 / 12, 1 / 3, 1 / 4, 1 / 4]),
+])
+def test_ad_hand_calculated_profiles(counts, discount, expected):
+    result = absolute_discounting(counts)
+    assert result.status == "defined" and result.reason is None
+    assert result.diagnostics["discount"] == pytest.approx(discount)
+    assert result.diagnostics["boundary_case"] is None
+    np.testing.assert_allclose(result.probabilities, expected, rtol=0, atol=2e-16)
+    uniform = np.full(len(counts), 1 / len(counts))
+    assert math.isfinite(kl_bits(uniform, result.probabilities))
+
+
+@pytest.mark.parametrize("counts, expected, boundary", [
+    ([0], [1], "empty_sample_uniform"),
+    ([0, 0, 0], [1 / 3] * 3, "empty_sample_uniform"),
+    ([1], [1], "full_alphabet_empirical"),
+    ([1, 2], [1 / 3, 2 / 3], "full_alphabet_empirical"),
+    ([3, 4], [3 / 7, 4 / 7], "full_alphabet_empirical"),
+    ([1, 1], [1 / 2, 1 / 2], "full_alphabet_empirical"),
+])
+def test_ad_explicit_empty_and_full_alphabet_extensions(counts, expected, boundary):
+    result = absolute_discounting(counts)
+    assert result.status == "defined" and result.reason is None
+    assert result.diagnostics["boundary_case"] == boundary
+    assert result.diagnostics["discount"] == 0
+    np.testing.assert_allclose(result.probabilities, expected, rtol=0, atol=2e-16)
+
+
+def test_ad_versioned_diagnostics_and_compatible_dispatch():
+    assert ABSOLUTE_DISCOUNTING_RULE == "falahatgar2017_experimental"
+    assert ABSOLUTE_DISCOUNTING_VERSION == "robust-ad-v1"
+    for counts in ([0, 0, 0], [0, 2, 4], [1, 2, 4]):
+        result = evaluate_baseline(
+            "absolute_discounting", counts, target=[1 / 3] * 3,
+            dirichlet_exponents=DIRICHLET_EXPONENTS,
+        )
+        assert result.diagnostics["estimator_rule"] == ABSOLUTE_DISCOUNTING_RULE
+        assert result.diagnostics["estimator_version"] == ABSOLUTE_DISCOUNTING_VERSION
+        assert result.diagnostics["n"] == sum(counts)
+        assert result.diagnostics["distinct"] == sum(c > 0 for c in counts)
+        assert result.diagnostics["c1"] == counts.count(1)
+        assert result.diagnostics["c2"] == counts.count(2)
+        np.testing.assert_array_equal(
+            result.probabilities, absolute_discounting(counts).probabilities,
+        )
+
+
+def test_ad_exhaustive_small_profiles_are_positive_normalized_and_label_invariant():
+    target = [0.05, 0.15, 0.3, 0.5]
+    for counts in product(range(5), repeat=4):
+        result = absolute_discounting(counts)
+        q = result.probabilities
+        assert result.status == "defined" and result.reason is None
+        assert np.all(np.isfinite(q)) and np.all(q > 0)
+        assert q.sum() == pytest.approx(1, abs=3e-16)
+        assert math.isfinite(kl_bits(target, q))
+        np.testing.assert_array_equal(
+            absolute_discounting(counts[::-1]).probabilities, q[::-1],
+        )
+        # Equal count classes must receive equal probabilities.
+        for count in set(counts):
+            values = q[np.asarray(counts) == count]
+            np.testing.assert_array_equal(values, np.full(values.size, values[0]))
+        if 0 < result.diagnostics["distinct"] < len(counts):
+            assert 0 < result.diagnostics["discount"] <= 0.9
 
 
 def test_ad_finite_case_allocates_the_reserved_mass():
@@ -108,6 +170,8 @@ def test_oracle_is_class_average_and_lower_bound():
 def test_invalid_counts_fail(counts):
     with pytest.raises(ValueError):
         validate_counts(counts)
+    with pytest.raises(ValueError):
+        absolute_discounting(counts)
 
 
 def test_kl_rejects_missing_normalization_and_does_not_clip_zeros():

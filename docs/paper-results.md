@@ -14,6 +14,16 @@ summaries, corpus controls and numerical validation measurements. The commands
 verify their checksums and recreate the current paper's displays. They do not
 resample data, evaluate the models again or establish new numerical validation.
 
+The v1.1.0 reference correction changes AD and every paired comparison that
+contains AD. It uses the original 99,000 benchmark trials and preserves the
+saved non-AD results, posterior summaries and numerical validation. Its rule,
+boundary conventions and historical difference are given in the
+[protocol](protocol.md#absolute-discounting). Regenerating these displays does
+not rerun the correction or certify a new full campaign. The original v1.0.0
+release retains the previous AD definition and results.
+See the [saved-sample correction guide](ad-correction.md) for recomputing AD
+from the original trial records and building the correction artifacts.
+
 The architecture illustration is regenerated as TikZ source, as used in the
 paper. The other three figures are PDFs. Six numbered table objects are generated,
 including the numerical validation table; the factorial table carries two labels.

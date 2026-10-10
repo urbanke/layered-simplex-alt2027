@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "protocol_id": "alt2027-retained-v2",
+  "protocol_id": "alt2027-retained-v3-robust-ad",
   "status": "frozen",
   "units": {
     "log_evidence": "nats",
@@ -17,7 +17,8 @@
     "fit": "Report free OLS alphabet slope and the separate slope-one offset; retain free-fit coefficients in saved summaries.",
     "normalization": "Retain raw sums; reject discrepancy >1e-3 before normalization. Engineering rejection threshold, not accuracy certification.",
     "calibration": "Required before production: independent/refinement evidence checks over full domain; predictive KL changes <=1e-5 bits, below printed precision. Individual checks retain units.",
-    "replication": "1000 trials per primary/power benchmark cell and 1000 profiles per spectrum/depth-curve cell; retain 5000 profiles per factorial cell. Fixed counts, common samples within comparisons, no outcome-dependent stopping."
+    "replication": "1000 trials per primary/power benchmark cell and 1000 profiles per spectrum/depth-curve cell; retain 5000 profiles per factorial cell. Fixed counts, common samples within comparisons, no outcome-dependent stopping.",
+    "absolute_discounting": "Use robust-ad-v1: delta=min(max(c1,1)/s,0.9), uniform at n=0, empirical at s=d. All sampling grids and seeds are unchanged."
   },
   "experiments": {
     "architecture": {
@@ -255,7 +256,14 @@
         4
       ],
       "dirichlet_target_policy": "redraw_per_trial_shared_across_n",
-      "sample_size_policy": "independent_multinomial_per_n"
+      "sample_size_policy": "independent_multinomial_per_n",
+      "absolute_discounting": {
+        "rule": "falahatgar2017_experimental",
+        "version": "robust-ad-v1",
+        "discount": "min(max(c1,1)/s,0.9)",
+        "empty_sample": "uniform",
+        "full_alphabet": "empirical"
+      }
     },
     "benchmark_powers": {
       "d": 10000,
@@ -491,7 +499,14 @@
         4
       ],
       "dirichlet_target_policy": "redraw_per_trial_shared_across_n",
-      "sample_size_policy": "independent_multinomial_per_n"
+      "sample_size_policy": "independent_multinomial_per_n",
+      "absolute_discounting": {
+        "rule": "falahatgar2017_experimental",
+        "version": "robust-ad-v1",
+        "discount": "min(max(c1,1)/s,0.9)",
+        "empty_sample": "uniform",
+        "full_alphabet": "empirical"
+      }
     },
     "bible": {
       "corpus": "data/kjv.txt",
@@ -803,5 +818,12 @@
     "trial_blocks": 10,
     "reporting": "Preserve per-trial paired differences and nonfinite outcomes; report Monte Carlo SEs symmetrically, plus diagnostics across ten disjoint blocks.",
     "sampling_rule": "The global trial and cell IDs determine random streams; machine, job assignment, completion order and worker count do not."
+  },
+  "revision": {
+    "supersedes": "alt2027-retained-v2",
+    "changed_method": "absolute_discounting",
+    "rule": "falahatgar2017_experimental",
+    "version": "robust-ad-v1",
+    "sampling_changed": false
   }
 }
