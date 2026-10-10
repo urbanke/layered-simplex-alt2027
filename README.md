@@ -47,7 +47,7 @@ validation table. The factorial table has two labels.
 
 ## Data and numerical conventions
 
-Compact scientific reference results (about 1.4 MB) are included in
+Compact scientific reference results (about 1.6 MB) are included in
 `results/` to check and regenerate the paper displays. Numerical tables and full
 simulation outputs are generated locally; they are not stored in this repository.
 Corpus text is downloaded separately from its original source. The repository

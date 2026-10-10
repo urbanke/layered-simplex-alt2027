@@ -12,7 +12,7 @@ locally by the full reproduction commands.
   the corpus text itself. The preparation command downloads the source, applies
   the exact tokenization and checks the resulting bytes against the paper's
   input. See [NOTICE.txt](../data/NOTICE.txt) for source and licensing.
-- About 1.4 MB of scientific reference summaries in `results/`, used
+- About 1.6 MB of scientific reference summaries in `results/`, used
   to check results and regenerate paper displays without rerunning predictions.
   These summaries are not the full saved trial data and do not replace independent
   experimental reproduction.
