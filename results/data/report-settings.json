@@ -1,0 +1,1 @@
+{"posterior_broad_min_depths":5,"posterior_individual_min_weight":0.05,"posterior_mass":0.95,"posterior_n_values":[1000,20000],"roles":["tab:bench","fig:orlitsky","tab:posteriors","tab:powers-bench","paired_differences","uniform_component_ablation"],"table_n":1000,"uniform_floor":1e-14}

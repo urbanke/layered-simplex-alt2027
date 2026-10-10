@@ -1,0 +1,14 @@
+Scientific code
+The Python and C implementation is distributed under the accompanying MIT
+license, copyright Meir Feder, Yaniv Fogel and Ruediger Urbanke. The retained
+numerical subset under src/lsa/alt/_vendor/pmwm is included under that license.
+Scientific references and method definitions are given in the accompanying paper.
+
+Dependencies
+NumPy, SciPy, Matplotlib, mpmath, ReportLab and pytest are installed separately
+and retain their respective licenses. Their source is not bundled here.
+
+Corpus data
+The two King James Bible token streams retain their source's status and notices.
+The software MIT license does not change the licensing of corpus data.
+See data/NOTICE.txt and data/GUTENBERG-LICENSE.txt.

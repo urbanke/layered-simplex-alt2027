@@ -1,0 +1,30 @@
+{
+  "bytes": 4273421,
+  "dataset_id": "kjv-secondary-word-punctuation-v1",
+  "distinct_types": 13554,
+  "file": "data/kjv-secondary.txt",
+  "preprocessing_script": "scripts/get_kjv.py",
+  "recipe": {
+    "case": "preserved",
+    "encoding": "UTF-8",
+    "join": "single space plus final newline",
+    "regex_engine": "Python re with Unicode semantics",
+    "source_normalization": [
+      "Omit the opening eleven-word Old Testament heading.",
+      "Replace the single double hyphen by an em dash.",
+      "Move the three asterisk separator tokens to the end."
+    ],
+    "token_regex": "\\w+|[^\\w\\s]"
+  },
+  "schema_version": 1,
+  "sha256": "b6f472f38d88a2efcfc000295560a92483da3e7b0ade00fe3f30160cf27f9560",
+  "source": "Project Gutenberg eBook #10; word-and-punctuation control tokenization",
+  "source_sha256": [
+    "0204adaed1f25700aa854218cae63c7172228c41088f335e99167a071eed83c0"
+  ],
+  "source_urls": [
+    "https://www.gutenberg.org/ebooks/10.txt.utf-8",
+    "https://www.gutenberg.org/cache/epub/10/pg10.txt"
+  ],
+  "tokens": 917868
+}

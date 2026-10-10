@@ -1,0 +1,32 @@
+\begin{tikzpicture}[x=4.0mm,y=1mm]
+  % dotted guide through the winning coordinate (drawn in two segments)
+  \draw[black!35,densely dotted,line width=0.5pt] (@WINNER_X@,8.5) -- (@WINNER_X@,53);
+  \draw[black!35,densely dotted,line width=0.5pt] (@WINNER_X@,-18) -- (@WINNER_X@,-3.5);
+  % --- layer rows ---
+  \foreach \i/\h in {@BARS_1@} \fill[black!45] (\i,44) rectangle ++(0.62,\h);
+  \draw[black!60,line width=0.4pt] (0.9,44) -- (25.0,44);
+  \node[left,font=\small] at (0.7,46.4) {$U^{(1)}$};
+  \foreach \i/\h in {@BARS_2@} \fill[black!45] (\i,30) rectangle ++(0.62,\h);
+  \draw[black!60,line width=0.4pt] (0.9,30) -- (25.0,30);
+  \node[left,font=\small] at (0.7,32.4) {$U^{(2)}$};
+  \node[font=\small] at (13,24.5) {$\vdots$};
+  \foreach \i/\h in {@BARS_3@} \fill[black!45] (\i,10) rectangle ++(0.62,\h);
+  \draw[black!60,line width=0.4pt] (0.9,10) -- (25.0,10);
+  \node[left,font=\small] at (0.7,12.4) {$U^{(L)}$};
+  % --- braces ---
+  \draw[decorate,decoration={brace,amplitude=3pt},black!70]
+    (1.0,52.5) -- (24.62,52.5) node[midway,above=3pt,font=\small] {$d$ coordinates, one per symbol};
+  \draw[decorate,decoration={brace,amplitude=3pt},black!70]
+    (25.6,50) -- (25.6,10) node[midway,right=4pt,align=left,font=\small]
+    {$L$ independent\\ uniform draws\\ from $\Delta_d$};
+  % --- arrow + operation ---
+  \draw[-{Stealth[length=2.4mm]},black!80] (12.81,7) -- (12.81,-2.5);
+  \node[right=8pt,align=left,font=\small] at (13.0,2.2)
+    {multiply coordinatewise, renormalize};
+  % --- theta row ---
+  \foreach \i/\h in {@BARS_4@} \fill[black!80] (\i,-16) rectangle ++(0.62,\h);
+  \draw[black!60,line width=0.4pt] (0.9,-16) -- (25.0,-16);
+  \node[left,font=\small] at (0.7,-13.6) {$\theta$};
+  \node[right,black!60,font=\small,align=left] at (0.9,-6.2)
+    {sparse, heavy-tailed:\\ a few coordinates \\ carry the mass};
+\end{tikzpicture}

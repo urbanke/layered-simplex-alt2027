@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "files": {
+    "__init__.py": {
+      "sha256": "f9b6dff640ca43344b6d1d34e291122b189b1b33cfee5f7e2773743c0ba76b6a"
+    },
+    "_runtime.py": {
+      "sha256": "7a531ea58c9c614d56c47ed7861f211b08ef614fdf472263a2fc3fef4caff6b8"
+    },
+    "fast_tables.py": {
+      "sha256": "04e7e96d9747013e4bda17feeca7da5052eb95541d167189fd2454367f2a58cf"
+    },
+    "kernel.py": {
+      "sha256": "bf87081617867d047a48bb7e56e14776ba50d0ba441b9ef7477c87c20112944f"
+    },
+    "layered.py": {
+      "sha256": "2a038f65f0ce66681cd7e8788fa94f1b594c89ba5779160a7f2c8c5cd514e771"
+    },
+    "mellin.py": {
+      "sha256": "9f1b905df43956949caaa382d9dc517af5a5c575bea6cef88e62315e5c849a8e"
+    },
+    "universal_tables.py": {
+      "sha256": "031b8c080d46a3a00ac6e408e3ec9072641fa69eaf2974c72e0efaba06dd915e"
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "scope": "Five concurrent workloads on one Linux x86-64 node, one numerical process/thread each. Worker start-to-completion includes initialization, evaluation, output writing and verification; excludes queueing and table construction. Not isolated cold-start or repeated warm-cache benchmarks.",
+  "workloads": [
+    {
+      "family": "spectrum",
+      "alpha": 1.5,
+      "n": 1000,
+      "d": 1000000,
+      "trials": 20,
+      "depths": [
+        0,
+        138
+      ],
+      "seconds": 206.607215,
+      "minutes": 3.443453583333333
+    },
+    {
+      "family": "benchmark_primary",
+      "target": "step",
+      "n": 20000,
+      "d": 10000,
+      "trials": 20,
+      "depths": [
+        0,
+        80
+      ],
+      "seconds": 52.700198,
+      "minutes": 0.8783366333333333
+    },
+    {
+      "family": "bible",
+      "prefixes": [
+        100,
+        500,
+        10000,
+        30000,
+        100000,
+        300000,
+        915860
+      ],
+      "d": 100000,
+      "depths": [
+        0,
+        54
+      ],
+      "chain_transitions": 2000,
+      "seconds": 3061.185244,
+      "minutes": 51.019754066666664
+    },
+    {
+      "family": "benchmark_primary",
+      "target": "zipf_1.5",
+      "n": 1000,
+      "d": 10000,
+      "trials": 20,
+      "depths": [
+        0,
+        80
+      ],
+      "seconds": 112.377938,
+      "minutes": 1.8729656333333333
+    },
+    {
+      "family": "benchmark_primary",
+      "target": "zipf_1.5",
+      "n": 20000,
+      "d": 10000,
+      "trials": 20,
+      "depths": [
+        0,
+        80
+      ],
+      "seconds": 782.608609,
+      "minutes": 13.043476816666667
+    }
+  ]
+}

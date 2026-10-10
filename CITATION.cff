@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the accompanying paper."
+title: "A Layered Simplex Architecture for Large Alphabets: reproducibility package"
+authors:
+  - family-names: Feder
+    given-names: Meir
+  - family-names: Fogel
+    given-names: Yaniv
+  - family-names: Urbanke
+    given-names: Ruediger
+license: MIT
+repository-code: "https://github.com/urbanke/layered-simplex-alt2027"
+version: 1.0.0
+preferred-citation:
+  type: article
+  title: "A Layered Simplex Architecture for Large Alphabets"
+  authors:
+    - family-names: Feder
+      given-names: Meir
+    - family-names: Fogel
+      given-names: Yaniv
+    - family-names: Urbanke
+      given-names: Ruediger
+  year: 2026

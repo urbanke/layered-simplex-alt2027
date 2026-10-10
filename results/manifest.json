@@ -1,0 +1,186 @@
+{
+  "description": "Compact scientific summaries for current-paper reporting. Full trials can be recomputed with the supplied protocol. Operational execution records are outside this bundle.",
+  "files": {
+    "data/benchmark_powers-blocks.json.gz": {
+      "bytes": 157308,
+      "sha256": "b0f3315ce2ce80fecc7885c51e2ae5639c3c8fd065bc7038aebc77f2b1fc6e7d"
+    },
+    "data/benchmark_powers.json.gz": {
+      "bytes": 30472,
+      "sha256": "190480faf4fa9fae4475675125bfe940277e18dbaf1d06e69e544ab77fa34abc"
+    },
+    "data/benchmark_primary-blocks.json.gz": {
+      "bytes": 975698,
+      "sha256": "5f85dc087d84024202b753b50c86bc46819a93c836492fb4f354c87963b76295"
+    },
+    "data/benchmark_primary.json.gz": {
+      "bytes": 148401,
+      "sha256": "aaf79b54150e12e29ca3069eac1c58eb3f04c5d4a4097ecc8afd47425932c4ed"
+    },
+    "data/bible-secondary.json": {
+      "bytes": 2783,
+      "sha256": "211372832a87132431715e80342e896053b35c59a724112e7a588713df145151"
+    },
+    "data/bible.json": {
+      "bytes": 16019,
+      "sha256": "330ac7c875232191d32755862cf8cce1660699d3202b3ef46cee38462657a268"
+    },
+    "data/construction.json": {
+      "bytes": 3152,
+      "sha256": "3238a8a0525005494162e10a40e9ed15a99c937d3a1d9fc5aec06fce55b34b3a"
+    },
+    "data/depth_scaling.json.gz": {
+      "bytes": 1534,
+      "sha256": "f069b424f1567a89893a3c8d070b16870b51e74ed42e6c55f4419c393fb73f7e"
+    },
+    "data/factorial-fits.json": {
+      "bytes": 2088,
+      "sha256": "8eb20a3b0ab908e501cdc7c76d25ccb34c0d76045c242e32ea2557bfb8f7848e"
+    },
+    "data/factorial.json.gz": {
+      "bytes": 6560,
+      "sha256": "61f9103f8d0230a28213422d6b0c1c3d43b4ac3b5920431f1ac1455fb2c2bdca"
+    },
+    "data/paired-reasons.json.gz": {
+      "bytes": 2724,
+      "sha256": "8694afdc2ab7f8370c0de01bbc5e6f20695ed5f452a07623407f6f0a551e77ea"
+    },
+    "data/report-settings.json": {
+      "bytes": 288,
+      "sha256": "6bb74382006c3b31985dd462a9c784fda74307a3ee88987329acedf3af86ba9c"
+    },
+    "data/runtime.json": {
+      "bytes": 1630,
+      "sha256": "600cb924eb1b3e8289dc4582a01359ff98f806ee604bf912f696d5b0387fadd9"
+    },
+    "data/spectrum.json.gz": {
+      "bytes": 62924,
+      "sha256": "9ed2ff48f8212ba49218d55d1e6649dc1e64407024dd1ee099715146159bd902"
+    },
+    "data/tokenization-controls.json": {
+      "bytes": 2043,
+      "sha256": "aaac26acf0ffc8a7d88a6adb9f9364eb57de9783ef5b4872c1044ec5999f2d52"
+    },
+    "data/validation.json": {
+      "bytes": 8605,
+      "sha256": "c32946fcfc317de8b4eff5eb5f8b636bc0fe54fe56233894137493679861a01e"
+    },
+    "templates/construction.tex": {
+      "bytes": 1849,
+      "sha256": "88452477ea8ffc16242f52c19f1569f3886b7cd935866cd291b1d2c05559f3b5"
+    }
+  },
+  "format": "lsa-paper-results-v1",
+  "paper_map": {
+    "comparison_diagnostics": [
+      "benchmark_primary",
+      "benchmark_powers"
+    ],
+    "figures": [
+      {
+        "data": [
+          "data/construction.json"
+        ],
+        "label": "fig:lsa",
+        "meaning": "Saved simplex layers and their normalized coordinatewise product; full-precision values generate displayed bars.",
+        "output": "figures/construction_tikz.tex"
+      },
+      {
+        "data": [
+          "data/spectrum.json.gz"
+        ],
+        "label": "fig:spectrum",
+        "meaning": "Three panels; exact L=0 alpha=0 zeros omitted on log axis; one marginal SE.",
+        "output": "figures/complexity_spectrum_L0.pdf"
+      },
+      {
+        "data": [
+          "data/benchmark_primary.json.gz"
+        ],
+        "label": "fig:orlitsky",
+        "meaning": "Eight sample sizes; one marginal SE; uniform floor triangles and nonfinite line breaks.",
+        "output": "figures/regret_vs_n_figures.pdf"
+      },
+      {
+        "data": [
+          "data/depth_scaling.json.gz"
+        ],
+        "label": "fig:depth",
+        "meaning": "Saved mean cost per discovered symbol and unfitted analytic heuristic; no error bars.",
+        "output": "figures/depth_scaling.pdf"
+      }
+    ],
+    "in_text_controls": [
+      "data/tokenization-controls.json",
+      "data/bible.json",
+      "data/validation.json",
+      "data/runtime.json"
+    ],
+    "scope": "99 benchmark cells, 902 method summaries, 3773 paired summaries; all 1000 trials per cell retained, including infinite/undefined outcomes.",
+    "tables": [
+      {
+        "data": [
+          "data/benchmark_primary.json.gz"
+        ],
+        "labels": [
+          "tab:bench"
+        ],
+        "meaning": "N=1000 primary; four-decimal bold ties excluding oracle.",
+        "output": "tables/primary.tex"
+      },
+      {
+        "data": [
+          "data/bible.json"
+        ],
+        "labels": [
+          "tab:bible"
+        ],
+        "meaning": "Redundancy in bits/token; three-decimal bold ties; empirical entropy and posterior mode.",
+        "output": "tables/bible.tex"
+      },
+      {
+        "data": [
+          "data/benchmark_powers.json.gz"
+        ],
+        "labels": [
+          "tab:powers-bench"
+        ],
+        "meaning": "N=1000 independent power sample set; four-decimal bold ties excluding oracle.",
+        "output": "tables/powers.tex"
+      },
+      {
+        "data": [
+          "data/validation.json"
+        ],
+        "labels": [
+          "tab:validation"
+        ],
+        "meaning": "Finite-domain discrepancies rounded upward, with units; not new validation or uniform proof.",
+        "output": "tables/validation.tex"
+      },
+      {
+        "data": [
+          "data/factorial.json.gz",
+          "data/factorial-fits.json"
+        ],
+        "labels": [
+          "tab:alphabet",
+          "tab:data"
+        ],
+        "meaning": "Free OLS slopes and separate slope-one B; finite-range log-log data exponents.",
+        "output": "tables/factorial.tex"
+      },
+      {
+        "data": [
+          "data/benchmark_primary.json.gz"
+        ],
+        "labels": [
+          "tab:posteriors"
+        ],
+        "meaning": "Mean posteriors; shortest 95% interval, ties favor larger mass; not confidence intervals.",
+        "output": "tables/posteriors.tex"
+      }
+    ],
+    "uncertainty": "Sample SD/sqrt(T); paired SE computed from same-trial differences. Ten 100-trial blocks are descriptive, not confidence intervals."
+  }
+}

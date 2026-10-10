@@ -1,0 +1,1 @@
+Scientific numerical components from product_model_with_memory by Ruediger Urbanke, adapted for the Layered Simplex Architecture. This package includes the corrected contour provider, immutable table access, and independent reference calculations used by the current paper. See the repository licence and third-party notices.

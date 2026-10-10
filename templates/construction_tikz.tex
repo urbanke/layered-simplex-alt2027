@@ -1,0 +1,32 @@
+\begin{tikzpicture}[x=4.0mm,y=1mm]
+  % dotted guide through the winning coordinate (drawn in two segments)
+  \draw[black!35,densely dotted,line width=0.5pt] (15.31,8.5) -- (15.31,53);
+  \draw[black!35,densely dotted,line width=0.5pt] (15.31,-18) -- (15.31,-3.5);
+  % --- layer rows ---
+  \foreach \i/\h in {1/3.43,2/1.21,3/1.53,4/0.21,5/1.02,6/1.72,7/0.35,8/0.65,9/0.53,10/0.19,11/0.99,12/3.15,13/0.07,14/1.94,15/2.54,16/0.40,17/1.39,18/2.11,19/1.47,20/0.78,21/1.44,22/0.14,23/0.30,24/0.43} \fill[black!45] (\i,44) rectangle ++(0.62,\h);
+  \draw[black!60,line width=0.4pt] (0.9,44) -- (25.0,44);
+  \node[left,font=\small] at (0.7,46.4) {$U^{(1)}$};
+  \foreach \i/\h in {1/0.86,2/1.58,3/0.63,4/3.58,5/0.63,6/2.27,7/0.98,8/0.65,9/1.81,10/0.77,11/1.44,12/1.33,13/0.23,14/1.22,15/2.95,16/0.94,17/0.03,18/1.63,19/0.21,20/0.02,21/0.07,22/2.73,23/1.34,24/0.08} \fill[black!45] (\i,30) rectangle ++(0.62,\h);
+  \draw[black!60,line width=0.4pt] (0.9,30) -- (25.0,30);
+  \node[left,font=\small] at (0.7,32.4) {$U^{(2)}$};
+  \node[font=\small] at (13,24.5) {$\vdots$};
+  \foreach \i/\h in {1/0.99,2/0.02,3/0.02,4/0.04,5/2.73,6/1.85,7/0.30,8/1.82,9/0.12,10/1.20,11/2.09,12/2.84,13/0.30,14/1.08,15/1.39,16/2.40,17/1.46,18/0.09,19/0.45,20/0.41,21/3.37,22/1.14,23/0.54,24/1.35} \fill[black!45] (\i,10) rectangle ++(0.62,\h);
+  \draw[black!60,line width=0.4pt] (0.9,10) -- (25.0,10);
+  \node[left,font=\small] at (0.7,12.4) {$U^{(L)}$};
+  % --- braces ---
+  \draw[decorate,decoration={brace,amplitude=3pt},black!70]
+    (1.0,52.5) -- (24.62,52.5) node[midway,above=3pt,font=\small] {$d$ coordinates, one per symbol};
+  \draw[decorate,decoration={brace,amplitude=3pt},black!70]
+    (25.6,50) -- (25.6,10) node[midway,right=4pt,align=left,font=\small]
+    {$L$ independent\\ uniform draws\\ from $\Delta_d$};
+  % --- arrow + operation ---
+  \draw[-{Stealth[length=2.4mm]},black!80] (12.81,7) -- (12.81,-2.5);
+  \node[right=8pt,align=left,font=\small] at (13.0,2.2)
+    {multiply coordinatewise, renormalize};
+  % --- theta row ---
+  \foreach \i/\h in {1/1.31,2/0.01,3/0.02,4/0.01,5/0.21,6/2.18,7/0.03,8/0.13,9/0.02,10/0.06,11/0.35,12/7.97,13/0.00,14/3.68,15/10.72,16/0.75,17/0.01,18/0.05,19/0.03,20/0.01,21/0.02,22/0.26,23/0.11,24/0.06} \fill[black!80] (\i,-16) rectangle ++(0.62,\h);
+  \draw[black!60,line width=0.4pt] (0.9,-16) -- (25.0,-16);
+  \node[left,font=\small] at (0.7,-13.6) {$\theta$};
+  \node[right,black!60,font=\small,align=left] at (0.9,-6.2)
+    {sparse, heavy-tailed:\\ a few coordinates \\ carry the mass};
+\end{tikzpicture}

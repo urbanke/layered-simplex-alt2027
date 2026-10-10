@@ -1,0 +1,48 @@
+CORPUS SOURCE AND LICENSING
+
+The corpus inputs are downloaded and prepared locally; this repository
+contains their recipes and checksums, not the corpus text. Both inputs
+are derived from The King James Version of the Bible, Project Gutenberg
+eBook #10:
+https://www.gutenberg.org/ebooks/10
+
+Official UTF-8 download:
+https://www.gutenberg.org/ebooks/10.txt.utf-8
+Alternate official endpoint with the same pinned bytes:
+https://www.gutenberg.org/cache/epub/10/pg10.txt
+Downloaded source SHA-256:
+0204adaed1f25700aa854218cae63c7172228c41088f335e99167a071eed83c0
+
+Run python scripts/get_kjv.py to prepare data/kjv.txt and
+data/kjv-secondary.txt, or supply --from-file for a local copy of that
+source. Source and prepared-output checksums must match before output
+files are published. The accompanying manifests specify the recipes,
+counts and exact prepared text hashes:
+
+Canonical: 915,860 tokens, 13,550 distinct types.
+SHA-256: 27c79dc3ad00db78e55a09f9d0140470e42ce11bd41099a2972712fbe2e48196
+Secondary: 917,868 tokens, 13,554 distinct types.
+SHA-256: b6f472f38d88a2efcfc000295560a92483da3e7b0ade00fe3f30160cf27f9560
+
+The secondary recipe includes explicit presentation normalization to
+reproduce the fixed control: omit the initial testament heading, convert
+the one double hyphen to an em dash, and place the three-asterisk separator
+at the end before word-and-punctuation tokenization. These conventions
+are recorded in the preprocessing script and secondary manifest.
+
+Project Gutenberg identifies this work as public domain in the USA.
+The corpus text is separate from the software covered by the repository's
+MIT licence; that software licence does not claim copyright in this text.
+GUTENBERG-LICENSE.txt preserves the complete source licence without textual
+changes, extracted from the official eBook downloaded on 2026-10-10.
+The landing page provides the original text and other formats at no charge.
+
+This eBook is for the use of anyone anywhere in the United States and
+most other parts of the world at no cost and with almost no restrictions
+whatsoever. You may copy it, give it away or re-use it under the terms
+of the Project Gutenberg License included with this eBook or online
+at www.gutenberg.org. If you are not located in the United States,
+you will have to check the laws of the country where you are located
+before using this eBook.
+
+Source attribution identifies provenance and does not imply endorsement.

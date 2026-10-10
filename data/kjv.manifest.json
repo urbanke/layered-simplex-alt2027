@@ -1,0 +1,36 @@
+{
+  "bytes": 4270749,
+  "case": "preserved",
+  "dataset_id": "kjv-word-punctuation-v1",
+  "distinct_types": 13550,
+  "encoding": "UTF-8",
+  "file": "data/kjv.txt",
+  "prefix_distinct_types": {
+    "10000": 1160,
+    "100000": 3839,
+    "30000": 2119,
+    "300000": 6922
+  },
+  "preprocessing_script": "scripts/get_kjv.py",
+  "recipe": {
+    "body": "text between Project Gutenberg start/end marker lines",
+    "case": "preserved",
+    "drop": "replace asterisks and hyphens by space",
+    "join": "single space, no final newline",
+    "possessives": "retain curly apostrophe followed by s; remove other curly apostrophes",
+    "token_regex": "[A-Za-z]+|\u2019s|[^\\sA-Za-z]",
+    "verse_numbers": "replace digit-pair chapter:verse by space"
+  },
+  "schema_version": 1,
+  "sha256": "27c79dc3ad00db78e55a09f9d0140470e42ce11bd41099a2972712fbe2e48196",
+  "source": "Project Gutenberg eBook #10",
+  "source_sha256": [
+    "0204adaed1f25700aa854218cae63c7172228c41088f335e99167a071eed83c0"
+  ],
+  "source_urls": [
+    "https://www.gutenberg.org/ebooks/10.txt.utf-8",
+    "https://www.gutenberg.org/cache/epub/10/pg10.txt"
+  ],
+  "token_separator": "whitespace",
+  "tokens": 915860
+}

@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "layered-simplex-architecture"
+version = "1.0.0"
+description = "Code for the paper 'A Layered Simplex Architecture for Large Alphabets'"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.13"
+authors = [
+  { name = "Meir Feder" },
+  { name = "Yaniv Fogel" },
+  { name = "Ruediger Urbanke" },
+]
+dependencies = [
+    "numpy",
+    "scipy",
+    "matplotlib",
+    "reportlab",
+    "mpmath",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+lsa = ["_kernel.c"]
+"lsa.alt" = ["sealed_interp.c"]
+"lsa.alt._vendor.pmwm" = ["NOTICE.txt", "implementation.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+
+[tool.ruff.lint.per-file-ignores]
+# plot_factorial_scaling.py keeps the compact drawing style of the
+# original experiment repository
+"scripts/plot_factorial_scaling.py" = ["E701", "E702"]
